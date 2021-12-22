@@ -12,11 +12,11 @@ class SearchHome extends StatefulWidget {
 }
 
 class _SearchHomeState extends State<SearchHome> {
-  String? _portal;
-  String? _keyword;
-  String? _location;
-  String? _jobtitle;
-  String? _exclude;
+  String? _portal = "";
+  String? _keyword = "";
+  String? _location = "";
+  String? _jobtitle = "";
+  String? _exclude = "";
   String? infoMsg;
   bool refreshUI = false;
   List<String> _searchResults = [];
@@ -51,6 +51,10 @@ class _SearchHomeState extends State<SearchHome> {
 
   Future getSearchResults() async {
     var list = <String?>[''];
+    String excludeStr = (_exclude != null) ? ('"$_exclude"') : "";
+    String jobtitle = (_jobtitle != null) ? ('"$_jobtitle"') : "";
+    String keyword = (_keyword != null) ? ('"$_keyword"') : "";
+    String location = (_location != null) ? ('"$_location"') : "";
     String searchStr;
     switch (_selectedPortal) {
       case 'linkedin':
@@ -64,9 +68,9 @@ class _SearchHomeState extends State<SearchHome> {
         //+"Current+%2A+Google+%2A+" - curret employer
         //http: //www.google.com/search?q=+"Software+Engineer"+"HTML" -"Intern" -intitle:"profiles" -inurl:"dir/+"+site:www.linkedin.com/in/+OR+site:www.linkedin.com/pub/+"Current+%2A+Google+%2A+"
         //site: in.linked.com --- *** in. is for country code INDIA
-        String excludeStr = (_exclude != null) ? ('-"$_exclude"') : "";
+
         searchStr =
-            'http://www.google.com/search?q=+"$_jobtitle"+"$_keyword" $excludeStr-intitle:"profiles" -inurl:"dir/+"+site:in.$_selectedPortal.com/in/+OR+site:in.$_selectedPortal.com/pub/';
+            'http://www.google.com/search?q=+$jobtitle+$keyword -$excludeStr-intitle:"profiles" -inurl:"dir/+"+site:in.$_selectedPortal.com/in/+OR+site:in.$_selectedPortal.com/pub/';
         if (kDebugMode) {
           // ignore: avoid_print
           print(searchStr);
@@ -84,9 +88,9 @@ class _SearchHomeState extends State<SearchHome> {
         //"Paris" - Location
         //"http://www.google.com/search?q=site:github.com+"joined on" -intitle:"at master" -inurl:"tab" -inurl:"jobs." -inurl:"articles"+"leoforce"+"hyderabad""
         //http://www.google.com/search?q=site:github.com+"joined on" -intitle:"at master" -inurl:"tab" -inurl:"jobs." -inurl:"articles"+"PHP+Developer"+"Paris"
-        String? locStr = (_location != null) ?  + "_location" : "";
+
         searchStr =
-            'http://www.google.com/search?q=site:$_selectedPortal.com+"joined on" -intitle:"at master" -inurl:"tab" -inurl:"jobs." -inurl:"articles"+"$_keyword" $locStr';
+            'http://www.google.com/search?q=site:$_selectedPortal.com+"joined on" -intitle:"at master" -inurl:"tab" -inurl:"jobs." -inurl:"articles"+"$_keyword" $location';
 
         break;
       // case 'indeed':
